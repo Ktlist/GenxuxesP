@@ -1,0 +1,94 @@
+import argparse
+import os.path
+import random
+from PIL import Image, ImageDraw
+
+# entrada de datos,
+# xuxe1
+# xuxe2
+# numero imagenes
+ap = argparse.ArgumentParser()
+ap.add_argument("-i1", "--image1", required=True, help="name of xuxe kind")
+ap.add_argument("-i2", "--image2", required=False, help="name of second xuxe kind, optional")
+ap.add_argument("-n", "--number", required=True, help="Number of images resulting")
+ap.add_argument("-d", "--outdir", required=False, help="output directory, default is Results")
+args = vars(ap.parse_args())
+
+if args["outdir"] is None:
+    outdir = "Results/"
+else:
+    outdir = args["outdir"] + "/"
+# cargar el fondo w=145,h=145
+
+n1 = 0
+n2 = 0
+Tags = 1
+BB2 = 1
+# cuenta el numero de imagenes en el directorio
+for root1, dirs1, files1 in os.walk("Xuxes/" + args["image1"]):
+    for f in files1:
+        if f.endswith(".png"):
+            n1 = n1 + 1
+
+# cuenta el numero de imagenes en el directorio
+if args["image2"] is not None:
+    Tags = 2
+    for root2, dirs2, files2 in os.walk("Xuxes/" + args["image2"]):
+        for f in files2:
+            if f.endswith(".png"):
+                n2 = n2 + 1
+
+# bucle que se repite segun el numero especificado
+for i in range(int(args["number"])):
+    # for i in range(4):
+    pathf = "Xuxes/fondos/" + "fondo" + str(random.randint(1, numeroFondos)) + ".png"
+    fondo = Image.open(pathf)
+    # cargar xuxe 1 aleatoria de las existenetes en el directorio
+    path1 = "Xuxes/" + args["image1"] + "/" + args["image1"] + str(random.randint(1, n1)) + ".png"
+    xuxe1 = Image.open(path1)
+    xuxe1.load()
+    # xuxe1.show()
+    xuxe1.thumbnail((128, 128))
+    # xuxe1.show()
+    xuxe1 = xuxe1.rotate(random.randint(0, 360))  # se rota de forma aleatoria
+    BB1 = xuxe1.getbbox()
+    # test=ImageDraw.Draw(xuxe1)
+    # test.rectangle(BB1)
+    # xuxe1.show()
+    # print(str(BB1))
+
+    # lo mismo para xuxe2 en caso de existir nombre
+    if args["image2"] is not None:
+        path2 = "Xuxes/" + args["image2"] + "/" + args["image2"] + str(random.randint(1, n2)) + ".png"
+        xuxe2 = Image.open(path2)
+        # xuxe2.show()
+        xuxe2.thumbnail((128, 128))
+        # xuxe2.show()
+        xuxe2 = xuxe2.rotate(random.randint(0, 360))  # se rota de forma aleatoria
+        BB2 = xuxe2.getbbox()
+        # xuxe2.show()
+        # print(path1)
+
+    # una vez obtenido ambas xuxes y el fondo hay que juntarlo
+    position = (random.randint(0 - BB1[0], (fondo.width - (BB1[2] - BB1[0]))),
+                random.randint(0 - BB1[0], (fondo.height - (BB1[3] - BB1[1]))))
+    fondo.paste(xuxe1, position, xuxe1)
+    BB1 = str(position[0] + BB1[0]) + ';' + str(position[1] + BB1[1]) + ';' + str(BB1[2] + position[0]) + ';' + str(
+        BB1[3] + position[1])
+    # se repite para segunda xuxe si necesario
+    if args["image2"] is not None:
+        position = (random.randint(0 - BB2[0], (fondo.width - (BB2[2] - BB2[0]))),
+                    random.randint(0 - BB2[1], (fondo.height - (BB2[3] - BB2[1]))))
+        fondo.paste(xuxe2, position, xuxe2)
+        BB2 = [position[0] + BB2[0], position[1] + BB2[1], BB2[2] + position[0], BB2[3] + position[1]]
+
+    # test=ImageDraw.Draw(fondo)
+    # test.rectangle(BB1,outline='red')
+    # fondo.show()
+    fondo.save(outdir + "Imag_" + str(i) + ".jpg")
+    fondo.close()
+    f = open(outdir + "Imag_" + str(i) + ".csv", 'w')
+    f.write(str(Tags) + ";" + str(args["image1"]) + ";" + BB1 + ";" + str(args["image2"]) + ";" + str(BB2))
+    f.close()
+    # cv2.waitKey()
+# print(fondo)
