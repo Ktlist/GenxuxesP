@@ -24,6 +24,7 @@ n1 = 0
 n2 = 0
 Tags = 1
 BB2 = 1
+numeroFondos= 5
 # cuenta el numero de imagenes en el directorio
 for root1, dirs1, files1 in os.walk("Xuxes/" + args["image1"]):
     for f in files1:
@@ -41,7 +42,7 @@ if args["image2"] is not None:
 # bucle que se repite segun el numero especificado
 for i in range(int(args["number"])):
     # for i in range(4):
-    pathf = "Xuxes/fondos/" + "fondo" + str(random.randint(1, numeroFondos)) + ".png"
+    pathf = "Xuxes/fondos/" + "fondo" + str(random.randint(1, numeroFondos)) + ".jpg"
     fondo = Image.open(pathf)
     # cargar xuxe 1 aleatoria de las existenetes en el directorio
     path1 = "Xuxes/" + args["image1"] + "/" + args["image1"] + str(random.randint(1, n1)) + ".png"
@@ -69,7 +70,7 @@ for i in range(int(args["number"])):
         # xuxe2.show()
         # print(path1)
 
-    # una vez obtenido ambas xuxes y el fondo hay que juntarlo
+    # una vez obtenido ambas xuxes y el fondo hay que juntarlo todo
     position = (random.randint(0 - BB1[0], (fondo.width - (BB1[2] - BB1[0]))),
                 random.randint(0 - BB1[0], (fondo.height - (BB1[3] - BB1[1]))))
     fondo.paste(xuxe1, position, xuxe1)
