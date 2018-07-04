@@ -24,6 +24,7 @@ n1 = 0
 n2 = 0
 Tags = 1
 BB2 = 1
+BB2s=1
 numeroFondos= 5
 # cuenta el numero de imagenes en el directorio
 for root1, dirs1, files1 in os.walk("Xuxes/" + args["image1"]):
@@ -53,8 +54,8 @@ for i in range(int(args["number"])):
     # xuxe1.show()
     xuxe1 = xuxe1.rotate(random.randint(0, 360))  # se rota de forma aleatoria
     BB1 = xuxe1.getbbox()
-    # test=ImageDraw.Draw(xuxe1)
-    # test.rectangle(BB1)
+    #test=ImageDraw.Draw(xuxe1)
+    #test.rectangle(BB1,outline='red')
     # xuxe1.show()
     # print(str(BB1))
 
@@ -70,26 +71,26 @@ for i in range(int(args["number"])):
         # xuxe2.show()
         # print(path1)
 
-    # una vez obtenido ambas xuxes y el fondo hay que juntarlo todo
-    position = (random.randint(0 - BB1[0], (fondo.width - (BB1[2] - BB1[0]))),
-                random.randint(0 - BB1[0], (fondo.height - (BB1[3] - BB1[1]))))
+    # una vez obtenido ambas xuxes y el fondo hay que juntarlo
+    position = (random.randint(0 - BB1[0], (fondo.width - BB1[2])),
+                random.randint(0 - BB1[0], (fondo.height - BB1[3])))
     fondo.paste(xuxe1, position, xuxe1)
-    BB1 = str(position[0] + BB1[0]) + ';' + str(position[1] + BB1[1]) + ';' + str(BB1[2] + position[0]) + ';' + str(
+    BB1s = str(position[0] + BB1[0]) + ';' + str(position[1] + BB1[1]) + ';' + str(BB1[2] + position[0]) + ';' + str(
         BB1[3] + position[1])
     # se repite para segunda xuxe si necesario
     if args["image2"] is not None:
-        position = (random.randint(0 - BB2[0], (fondo.width - (BB2[2] - BB2[0]))),
-                    random.randint(0 - BB2[1], (fondo.height - (BB2[3] - BB2[1]))))
+        position = (random.randint(0 - BB2[0], (fondo.width - (BB2[2]))),
+                    random.randint(0 - BB2[1], (fondo.height - (BB2[3]))))
         fondo.paste(xuxe2, position, xuxe2)
-        BB2 = [position[0] + BB2[0], position[1] + BB2[1], BB2[2] + position[0], BB2[3] + position[1]]
+        BB2s = [position[0] + BB2[0], position[1] + BB2[1], BB2[2] + position[0], BB2[3] + position[1]]
 
-    # test=ImageDraw.Draw(fondo)
-    # test.rectangle(BB1,outline='red')
-    # fondo.show()
-    fondo.save(outdir + "Imag_" + str(i) + ".jpg")
+    #test2=ImageDraw.Draw(fondo)
+    #test2.rectangle(BB1,outline='red')
+    #fondo.show()
+    fondo.save(outdir + str(args["image1"]) + str(i) + ".jpg")
     fondo.close()
-    f = open(outdir + "Imag_" + str(i) + ".csv", 'w')
-    f.write(str(Tags) + ";" + str(args["image1"]) + ";" + BB1 + ";" + str(args["image2"]) + ";" + str(BB2))
+    f = open(outdir + str(args["image1"]) + str(i) + ".csv", 'w')
+    f.write(str(Tags) + ";" + str(args["image1"]) + ";" + BB1s + ";" + str(args["image2"]) + ";" + str(BB2s))
     f.close()
     # cv2.waitKey()
 # print(fondo)
