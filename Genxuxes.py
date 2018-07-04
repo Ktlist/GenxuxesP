@@ -18,14 +18,15 @@ if args["outdir"] is None:
     outdir = "Results/"
 else:
     outdir = args["outdir"] + "/"
-# cargar el fondo w=145,h=145
 
+# variables auxiliares
 n1 = 0
 n2 = 0
 Tags = 1
 BB2 = 1
 BB2s=1
-numeroFondos= 5
+numeroFondos= 4
+
 # cuenta el numero de imagenes en el directorio
 for root1, dirs1, files1 in os.walk("Xuxes/" + args["image1"]):
     for f in files1:
