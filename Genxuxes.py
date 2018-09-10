@@ -2,6 +2,22 @@ import argparse
 import os.path
 import random
 from PIL import Image, ImageDraw
+from tfmaux import *
+
+
+def convert(size, box):
+    dw = 1./size[0]
+    dh = 1./size[1]
+    x = (box[0] + box[1])/2.0
+    y = (box[2] + box[3])/2.0
+    w = box[1] - box[0]
+    h = box[3] - box[2]
+    x = x*dw
+    w = w*dw
+    y = y*dh
+    h = h*dh
+    return (x,y,w,h)
+
 
 # entrada de datos,
 # xuxe1
@@ -76,8 +92,8 @@ for i in range(int(args["number"])):
     position = (random.randint(0 - BB1[0], (fondo.width - BB1[2])),
                 random.randint(0 - BB1[0], (fondo.height - BB1[3])))
     fondo.paste(xuxe1, position, xuxe1)
-    BB1s = str(position[0] + BB1[0]) + ';' + str(position[1] + BB1[1]) + ';' + str(BB1[2] + position[0]) + ';' + str(
-        BB1[3] + position[1])
+    b = (float(BB1[0])+position[0], float(BB1[2])+position[0], float(BB1[1])+ position[1], float(BB1[3])+ position[1])
+    BB1s =convert((141,141),b)
     # se repite para segunda xuxe si necesario
     if args["image2"] is not None:
         position = (random.randint(0 - BB2[0], (fondo.width - (BB2[2]))),
@@ -90,8 +106,11 @@ for i in range(int(args["number"])):
     #fondo.show()
     fondo.save(outdir + str(args["image1"]) + str(i) + ".jpg")
     fondo.close()
-    f = open(outdir + str(args["image1"]) + str(i) + ".csv", 'w')
-    f.write(str(Tags) + ";" + str(args["image1"]) + ";" + BB1s + ";" + str(args["image2"]) + ";" + str(BB2s))
+    f = open(outdir + str(args["image1"]) + str(i) + ".txt", 'w')
+    if args["image2"] is not None:
+        f.write(str(Tags) + ";" + str(args["image1"]) + ";" + BB1s + ";" + str(args["image2"]) + ";" + str(BB2s))
+    else:
+        f.write(str(LabelSW.get(args["image1"])) + " " + str(BB1s[0])+" " +str(BB1s[1])+" " +str(BB1s[2])+" " +str(BB1s[3]))
     f.close()
     # cv2.waitKey()
 # print(fondo)
