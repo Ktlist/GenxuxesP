@@ -43,7 +43,7 @@ Tags = 1
 BB2 = 1
 BB2s=1
 numeroFondos= 4
-res=(320,240)
+res=[320,240]
 # cuenta el numero de imagenes en el directorio
 for root1, dirs1, files1 in os.walk("Xuxes/" + args["image1"]):
     for f in files1:
@@ -74,8 +74,8 @@ for i in range(int(args["number"])):
     xuxe1.load()
     # reescala la xuxe a un tamaño aleatorio entre un minimo y la mitad de la resolucion del fondo,
     #la idea es variar el tamaño de los objetos a reconocer
-    rand_res=(random.randint(0,res(1)/2),random.randint(0,res(2)/2))
-    xuxe1.thumbnail((rand_res(0), rand_res(1)))
+    rand_res=[random.randint(res[0]/4,res[0]/2),random.randint(res[1]/4,res[1]/2)]
+    xuxe1.thumbnail((rand_res[0], rand_res[1]))
     # xuxe1.show()
     xuxe1 = xuxe1.rotate(random.randint(0, 360))  # se rota de forma aleatoria
     BB1 = xuxe1.getbbox()
@@ -89,8 +89,8 @@ for i in range(int(args["number"])):
         path2 = "Xuxes/" + args["image2"] + "/" + args["image2"] + str(random.randint(1, n2)) + ".png"
         xuxe2 = Image.open(path2)
         # xuxe2.show()
-        rand_res = (random.randint(0, res(1) / 2), random.randint(0, res(2) / 2))
-        xuxe2.thumbnail((rand_res(0), rand_res(1)))
+        rand_res = [random.randint(res[0]/4, res[0] / 2), random.randint(res[1]/4, res[1] / 2)]
+        xuxe2.thumbnail((rand_res[0], rand_res[1]))
         # xuxe2.show()
         xuxe2 = xuxe2.rotate(random.randint(0, 360))  # se rota de forma aleatoria
         BB2 = xuxe2.getbbox()
