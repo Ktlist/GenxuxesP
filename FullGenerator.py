@@ -59,3 +59,4 @@ for i in range(5500):
         os.system("python3 ./Genxuxes.py -i1 " + str(x1) + " -n 1 -m False -d ~/Resultados_Genxuxes/NoValidoTemp ")
     os.system("mv ~/Resultados_Genxuxes/NoValidoTemp/*.jpg ~/Resultados_Genxuxes/NoValido/novalido"+str(i)+".jpg")
     os.system("rm ~/Resultados_Genxuxes/NoValidoTemp/*.jpg")
+    os.system("rm ~/Resultados_Genxuxes/NoValidoTemp")
